@@ -1,8 +1,4 @@
 import nltk
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('stopwords')
-nltk.download('wordnet')
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -12,14 +8,17 @@ import streamlit as st
 # Load the text file and preprocess the data
 with open(r"booki.txt", encoding='utf-8') as f:
     data = f.read().replace('\n', ' ')
+
 # Tokenize the text into sentences
 sentences = sent_tokenize(data)
+
 # Define a function to preprocess each sentence
 def preprocess(sentence):
     # Tokenize the sentence into words
     words = word_tokenize(sentence)
     # Remove stopwords and punctuation
-    words = [word.lower() for word in words if word.lower() not in stopwords.words('french') and word not in string.punctuation]
+    words = [word.lower() for word in words if
+             word.lower() not in stopwords.words('french') and word not in string.punctuation]
     # Lemmatize the words
     lemmatizer = WordNetLemmatizer()
     words = [lemmatizer.lemmatize(word) for word in words]
@@ -42,22 +41,27 @@ def get_most_relevant_sentence(query):
             most_relevant_sentence = " ".join(sentence)
     return most_relevant_sentence
 
+# Define the main function to create a Streamlit app
+def main():
+    st.title("My Chatbot")
+    st.write("Bienvenue dans My chatbot de physique. Posez-moi vos questions.")
+
+    # Get the user's question
+    question = st.text_input("Posez moi vos question:")
+
+    # Create a button to submit the question
+    if st.button("Submit"):
+        # Call the chatbot function with the question and display the response
+        response = chatbot(question)
+        st.write("Chatbot: " + response)
+
+# Define the chatbot function to handle responses
 def chatbot(question):
     # Find the most relevant sentence
     most_relevant_sentence = get_most_relevant_sentence(question)
     # Return the answer
     return most_relevant_sentence
 
-# Create a Streamlit app
-def main(): # partie affichage
-    st.title("Chatbot")
-    st.write("Hello! I'm a chatbot. Ask me anything about the topic in the text file.")
-    # Get the user's question
-    question = st.text_input("You:")
-    # Create a button to submit the question
-    if st.button("Submit"):
-        # Call the chatbot function with the question and display the response
-        response = chatbot(question)
-        st.write("Chatbot: " + response)
+# Run the Streamlit app if the script is executed
 if __name__ == "__main__":
     main()
