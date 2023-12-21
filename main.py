@@ -49,7 +49,7 @@ def chatbot(question):
     return most_relevant_sentence
 
 # Create a Streamlit app
-def main():
+def main(): # partie affichage
     st.title("Chatbot")
     st.write("Hello! I'm a chatbot. Ask me anything about the topic in the text file.")
     # Get the user's question
